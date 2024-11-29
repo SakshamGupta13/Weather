@@ -57,6 +57,11 @@ async function checkWeather(city){
     console.log(weather_data);
 }
 
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        checkWeather(inputBox.value);
+    }
+});
 
 searchBtn.addEventListener('click', ()=>{
     checkWeather(inputBox.value);
