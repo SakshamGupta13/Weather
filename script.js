@@ -10,6 +10,15 @@ const location_not_found = document.querySelector('.location-not-found');
 
 const weather_body = document.querySelector('.weather-body');
 
+const nameBtn = document.querySelector('.nameBtn');
+const appNameInput = document.querySelector('.app-name');
+
+const emailBtn = document.querySelector('.emailBtn');
+const appEmailInput = document.querySelector('.app-email');
+const searchBox = document.querySelector('.search-box');
+const emailDiv = document.querySelector('.email');
+const nameDiv = document.querySelector('.name');
+
 
 async function checkWeather(city){
     const api_key = "693a0a8b2c20f1addee7bdf153490488";
@@ -57,12 +66,47 @@ async function checkWeather(city){
     console.log(weather_data);
 }
 
-document.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        checkWeather(inputBox.value);
-    }
-});
 
 searchBtn.addEventListener('click', ()=>{
     checkWeather(inputBox.value);
+});
+
+
+
+
+// === NAME ===
+function saveData1(name) {
+  localStorage.setItem("userName", name);
+//   alert("Name saved: " + name);
+
+  appNameInput.value = '';
+
+  emailDiv.style.display = "flex"; // Show email input
+    nameDiv.style.display = "none"; // Hide the name input
+}
+
+nameBtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  saveData1(appNameInput.value);
+});
+
+
+// === EMAIL ===
+function saveData2(email) {
+  if (!email.includes('@') || !email.includes('.')) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
+  localStorage.setItem("userEmail", email);
+//   alert("Email saved: " + email);
+
+  appEmailInput.value = '';
+  searchBox.style.display = "flex"; // Show the search box
+  emailDiv.style.display = "none"; // Hide the email input
+}
+
+emailBtn.addEventListener('click', (event) => {
+  event.preventDefault();
+  saveData2(appEmailInput.value);
 });
