@@ -167,3 +167,29 @@ emailBtn.addEventListener('click', (event) => {
     event.preventDefault();
     saveData2(appEmailInput.value);
 });
+
+// === ENTER KEY FUNCTIONALITY ===
+
+// For name input
+appNameInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        saveData1(appNameInput.value);
+    }
+});
+
+// For email input
+appEmailInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        saveData2(appEmailInput.value);
+    }
+});
+
+// For search (city) input
+inputBox.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        checkWeather(inputBox.value);
+    }
+});
