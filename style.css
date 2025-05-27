@@ -63,7 +63,7 @@ body{
 
 .container{
     position: absolute;
-    width: 400px;
+    width: 450px;
     height: min-content;
     background-color: #fff;
     border-radius: 12px;
@@ -275,7 +275,6 @@ body{
 .dataEmail{
     /* position: absolute; */
     margin-top: 750px;
-    margin-left: 25px;
     display: none;
     background-color: rgba(255, 255, 255, 0.2);
     color: #fff;
