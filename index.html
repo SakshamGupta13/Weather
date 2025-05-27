@@ -19,11 +19,11 @@
     <div class="about">
         <h1>AI Weather Reporter</h1>
         <div class="desc">
-            <p>Get the latest weather updates and forecasts for your location with our AI-powered weather reporter.</p>
+            <p>Get the latest weather updates and forecasts for your location with my weather reporter.</p>
         </div>
     </div>
     <div class="container">
-        <div class="header">
+        
             <div class="name">
                 <input type="text" placeholder="Enter Name" class="app-name">
                 <button class="fa-solid nameBtn">→</button>
@@ -32,13 +32,24 @@
                 <input type="text" placeholder="Enter Email" class="app-email">
                 <button class="fa-solid emailBtn">→</button>
             </div>
+            <div class="verifyBox">
+                <div id="inputs" class="verifyCode">
+                    <input type="text" maxlength="1" class="otp-input" id="first"/>
+                    <input type="text" maxlength="1" class="otp-input" id="second"/>
+                    <input type="text" maxlength="1" class="otp-input" id="third"/>
+                    <input type="text" maxlength="1" class="otp-input" id="fourth"/>
+                </div>
+
+                <div class="verify">
+                    <a href="#" class="verifyBtn">Verify OTP</a>
+                </div>
+            </div>
+
             <div class="search-box">
                 <input type="text" placeholder="Enter your location" class="input-box">
 
                 <button class="fa-solid fa-magnifying-glass" id="searchBtn"></button>
             </div>
-        </div>
-
         <div class="location-not-found">
             <h1>Sorry, Location not found!!!</h1>
             <img src="assets/404.png" alt="404 Error">

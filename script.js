@@ -21,6 +21,29 @@ const searchBox = document.querySelector('.search-box');
 const emailDiv = document.querySelector('.email');
 const nameDiv = document.querySelector('.name');
 const dataEmail = document.querySelector('.dataEmail');
+const verifyBtn = document.querySelector('.verifyBtn');
+const verifyBox = document.querySelector('.verifyBox');
+const verify = document.querySelector('.verify');
+
+let verificationCode = 0;
+
+function checkOTP(){
+    const first = document.querySelector('#first').value;
+    const second = document.querySelector('#second').value;
+    const third = document.querySelector('#third').value;
+    const fourth = document.querySelector('#fourth').value;
+    console.log(first);
+
+    const str = first + second + third + fourth;
+    console.log(str);
+    if(str === verificationCode.toString()){
+        verifyBox.style.display = "none";
+        searchBox.style.display = "flex";
+        
+    }else{
+        alert("Wrong OTP Entered");
+    }
+}
 
 // Email Sending Function
 function sendWeatherEmail(weather_data, city, aqi, aqiDesc) {
@@ -46,6 +69,29 @@ function sendWeatherEmail(weather_data, city, aqi, aqiDesc) {
             console.error("Email sending failed:", error);
         });
 }
+
+function sendVerificationEmail() {
+    const userName = localStorage.getItem("userName");
+    const userEmail = localStorage.getItem("userEmail");
+
+    verificationCode = Math.floor(1000 + Math.random() * 9000); // 4-digit code
+    localStorage.setItem("verificationCode", verificationCode); // Store for later verification
+
+    const templateParams = {
+        user_name: userName,
+        user_email: userEmail,
+        verification_code: verificationCode
+    };
+
+    emailjs.send("service_thm31dr", "template_g6xlthm", templateParams)
+        .then(() => {
+            console.log("Verification email sent successfully!");
+        })
+        .catch((error) => {
+            console.error("Verification email sending failed:", error);
+        });
+}
+
 
 
 // AQI Fetch Function
@@ -143,12 +189,17 @@ function saveData1(name) {
     appNameInput.value = '';
     emailDiv.style.display = "flex";
     nameDiv.style.display = "none";
+    verifyBox.style.display = "none";
 }
 
 nameBtn.addEventListener('click', (event) => {
     event.preventDefault();
     saveData1(appNameInput.value);
 });
+
+verifyBtn.addEventListener('click',()=>{
+    checkOTP();
+})
 
 // === EMAIL ===
 function saveData2(email) {
@@ -159,8 +210,12 @@ function saveData2(email) {
 
     localStorage.setItem("userEmail", email);
     appEmailInput.value = '';
-    searchBox.style.display = "flex";
+    // searchBox.style.display = "flex";
     emailDiv.style.display = "none";
+    verifyBox.style.display = "flex";
+    verify.style.display = "flex";
+
+    sendVerificationEmail();
 }
 
 emailBtn.addEventListener('click', (event) => {
