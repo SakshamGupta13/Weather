@@ -190,6 +190,7 @@ function saveData1(name) {
     emailDiv.style.display = "flex";
     nameDiv.style.display = "none";
     verifyBox.style.display = "none";
+    desc.style.display = "none";
 }
 
 nameBtn.addEventListener('click', (event) => {
@@ -214,6 +215,7 @@ function saveData2(email) {
     emailDiv.style.display = "none";
     verifyBox.style.display = "flex";
     verify.style.display = "flex";
+    desc.style.display = "none";
 
     sendVerificationEmail();
 }
