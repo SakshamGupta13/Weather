@@ -156,7 +156,7 @@ body{
 }
 
 .humidity{
-    margin-left: 20px;
+    margin-left: 5px;
 }
 
 .wind{
@@ -170,6 +170,13 @@ body{
 .weather-details .text{
     margin-left: 10px;
     font-size: 16px;
+}
+
+.aqi{
+    font-weight: 800;
+    font-size: 0.5rem;
+    margin-left: 25px;
+    margin-right: 15px;
 }
 
 .text span{
@@ -267,7 +274,8 @@ body{
 
 .dataEmail{
     /* position: absolute; */
-    margin-top: 700px;
+    margin-top: 750px;
+    margin-left: 25px;
     display: none;
     background-color: rgba(255, 255, 255, 0.2);
     color: #fff;

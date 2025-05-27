@@ -5,6 +5,7 @@ const temperature = document.querySelector('.temperature');
 const description = document.querySelector('.description');
 const humidity = document.getElementById('humidity');
 const wind_speed = document.getElementById('wind-speed');
+const aqiValue = document.getElementById('aqi-value'); // AQI Element
 
 const location_not_found = document.querySelector('.location-not-found');
 
@@ -21,8 +22,8 @@ const emailDiv = document.querySelector('.email');
 const nameDiv = document.querySelector('.name');
 const dataEmail = document.querySelector('.dataEmail');
 
-
-function sendWeatherEmail(weather_data, city) {
+// Email Sending Function
+function sendWeatherEmail(weather_data, city, aqi, aqiDesc) {
     const userName = localStorage.getItem("userName");
     const userEmail = localStorage.getItem("userEmail");
 
@@ -34,6 +35,7 @@ function sendWeatherEmail(weather_data, city) {
         description: weather_data.weather[0].description,
         humidity: `${weather_data.main.humidity}%`,
         wind_speed: `${weather_data.wind.speed} Km/H`,
+        aqi: `${aqi} (${aqiDesc})` // Include AQI
     };
 
     emailjs.send("service_thm31dr", "template_di0xi1p", templateParams)
@@ -46,14 +48,46 @@ function sendWeatherEmail(weather_data, city) {
 }
 
 
-async function checkWeather(city){
+// AQI Fetch Function
+async function fetchAQI(lat, lon) {
+    const api_key = "693a0a8b2c20f1addee7bdf153490488";
+    const url = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${api_key}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data && data.list && data.list.length > 0) {
+        const aqi = data.list[0].main.aqi;
+        const aqiDesc = getAQIDescription(aqi);
+        aqiValue.innerText = `${aqi} (${aqiDesc})`;
+        return { aqi, aqiDesc };
+    } else {
+        aqiValue.innerText = "N/A";
+        return { aqi: "N/A", aqiDesc: "Unknown" };
+    }
+}
+
+
+// AQI Description Helper
+function getAQIDescription(aqi) {
+    switch (aqi) {
+        case 1: return "Good";
+        case 2: return "Fair";
+        case 3: return "Moderate";
+        case 4: return "Poor";
+        case 5: return "Very Poor";
+        default: return "Unknown";
+    }
+}
+
+// Main Weather Function
+async function checkWeather(city) {
     const api_key = "693a0a8b2c20f1addee7bdf153490488";
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}`;
 
     const weather_data = await fetch(`${url}`).then(response => response.json());
 
-
-    if(weather_data.cod === `404`){
+    if (weather_data.cod === `404`) {
         location_not_found.style.display = "flex";
         desc.style.display = "none";
         weather_body.style.display = "none";
@@ -66,77 +100,70 @@ async function checkWeather(city){
     desc.style.display = "none";
     dataEmail.style.display = "flex";
     weather_body.style.display = "flex";
+
     temperature.innerHTML = `${Math.round(weather_data.main.temp - 273.15)}°C`;
     description.innerHTML = `${weather_data.weather[0].description}`;
-
     humidity.innerHTML = `${weather_data.main.humidity}%`;
     wind_speed.innerHTML = `${weather_data.wind.speed}Km/H`;
 
+    const lat = weather_data.coord.lat;
+    const lon = weather_data.coord.lon;
+    const { aqi, aqiDesc } = await fetchAQI(lat, lon);
 
-    switch(weather_data.weather[0].main){
-    case 'Clouds':
-        weather_img.src = "assets/cloud.png";
-        break;
-    case 'Clear':
-        weather_img.src = "assets/clear.png";
-        break;
-    case 'Rain':
-        weather_img.src = "assets/rain.png";
-        break;
-    case 'Mist':
-        weather_img.src = "assets/mist.png";
-        break;
-    case 'Snow':
-        weather_img.src = "assets/snow.png";
-        break;
-  }
+    switch (weather_data.weather[0].main) {
+        case 'Clouds':
+            weather_img.src = "assets/cloud.png";
+            break;
+        case 'Clear':
+            weather_img.src = "assets/clear.png";
+            break;
+        case 'Rain':
+            weather_img.src = "assets/rain.png";
+            break;
+        case 'Mist':
+            weather_img.src = "assets/mist.png";
+            break;
+        case 'Snow':
+            weather_img.src = "assets/snow.png";
+            break;
+    }
 
-  sendWeatherEmail(weather_data, city);
-
-  console.log(weather_data);
+    sendWeatherEmail(weather_data, city, aqi, aqiDesc);
+    console.log(weather_data);
 }
 
-
-searchBtn.addEventListener('click', ()=>{
+// Event Listener for Search Button
+searchBtn.addEventListener('click', () => {
     checkWeather(inputBox.value);
 });
 
-
-
-
 // === NAME ===
 function saveData1(name) {
-  localStorage.setItem("userName", name);
-//   alert("Name saved: " + name);
-
-  appNameInput.value = '';
-
-  emailDiv.style.display = "flex"; // Show email input
-    nameDiv.style.display = "none"; // Hide the name input
+    localStorage.setItem("userName", name);
+    appNameInput.value = '';
+    emailDiv.style.display = "flex";
+    nameDiv.style.display = "none";
 }
 
 nameBtn.addEventListener('click', (event) => {
-  event.preventDefault();
-  saveData1(appNameInput.value);
+    event.preventDefault();
+    saveData1(appNameInput.value);
 });
-
 
 // === EMAIL ===
 function saveData2(email) {
-  if (!email.includes('@') || !email.includes('.')) {
-    alert("Please enter a valid email address.");
-    return;
-  }
+    if (!email.includes('@') || !email.includes('.')) {
+        alert("Please enter a valid email address.");
+        return;
+    }
 
-  localStorage.setItem("userEmail", email);
-//   alert("Email saved: " + email);
-
-  appEmailInput.value = '';
-  searchBox.style.display = "flex"; // Show the search box
-  emailDiv.style.display = "none"; // Hide the email input
+    localStorage.setItem("userEmail", email);
+    appEmailInput.value = '';
+    searchBox.style.display = "flex";
+    emailDiv.style.display = "none";
 }
 
 emailBtn.addEventListener('click', (event) => {
-  event.preventDefault();
-  saveData2(appEmailInput.value);
+    event.preventDefault();
+    saveData2(appEmailInput.value);
 });
