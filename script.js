@@ -9,6 +9,7 @@ const wind_speed = document.getElementById('wind-speed');
 const location_not_found = document.querySelector('.location-not-found');
 
 const weather_body = document.querySelector('.weather-body');
+const desc = document.querySelector('.desc p');
 
 const nameBtn = document.querySelector('.nameBtn');
 const appNameInput = document.querySelector('.app-name');
@@ -18,6 +19,7 @@ const appEmailInput = document.querySelector('.app-email');
 const searchBox = document.querySelector('.search-box');
 const emailDiv = document.querySelector('.email');
 const nameDiv = document.querySelector('.name');
+const dataEmail = document.querySelector('.dataEmail');
 
 
 async function checkWeather(city){
@@ -29,6 +31,7 @@ async function checkWeather(city){
 
     if(weather_data.cod === `404`){
         location_not_found.style.display = "flex";
+        desc.style.display = "none";
         weather_body.style.display = "none";
         console.log("error");
         return;
@@ -36,6 +39,8 @@ async function checkWeather(city){
 
     console.log("run");
     location_not_found.style.display = "none";
+    desc.style.display = "none";
+    dataEmail.style.display = "flex";
     weather_body.style.display = "flex";
     temperature.innerHTML = `${Math.round(weather_data.main.temp - 273.15)}°C`;
     description.innerHTML = `${weather_data.weather[0].description}`;
