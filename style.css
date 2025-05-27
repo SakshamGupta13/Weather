@@ -62,6 +62,7 @@ body{
 }
 
 .container{
+    position: absolute;
     width: 400px;
     height: min-content;
     background-color: #fff;
@@ -264,16 +265,17 @@ body{
     background-color: #ababab;
 }
 
-.dataEmail {
-    position: absolute;
-    margin-top: 750px;
+.dataEmail{
+    /* position: absolute; */
+    margin-top: 700px;
     display: none;
     background-color: rgba(255, 255, 255, 0.2);
     color: #fff;
-    padding: 12px 24px;
+    padding: 15px 24px;
     border-radius: 12px;
     font-size: 16px;
     font-weight: 500;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     z-index: 1000;
+    margin-bottom: 20px;
 }
