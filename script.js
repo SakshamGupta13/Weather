@@ -22,6 +22,30 @@ const nameDiv = document.querySelector('.name');
 const dataEmail = document.querySelector('.dataEmail');
 
 
+function sendWeatherEmail(weather_data, city) {
+    const userName = localStorage.getItem("userName");
+    const userEmail = localStorage.getItem("userEmail");
+
+    const templateParams = {
+        user_name: userName,
+        user_email: userEmail,
+        location: city,
+        temperature: `${Math.round(weather_data.main.temp - 273.15)}°C`,
+        description: weather_data.weather[0].description,
+        humidity: `${weather_data.main.humidity}%`,
+        wind_speed: `${weather_data.wind.speed} Km/H`,
+    };
+
+    emailjs.send("service_thm31dr", "template_di0xi1p", templateParams)
+        .then(() => {
+            console.log("Email sent successfully!");
+        })
+        .catch((error) => {
+            console.error("Email sending failed:", error);
+        });
+}
+
+
 async function checkWeather(city){
     const api_key = "693a0a8b2c20f1addee7bdf153490488";
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}`;
@@ -50,25 +74,26 @@ async function checkWeather(city){
 
 
     switch(weather_data.weather[0].main){
-        case 'Clouds':
-            weather_img.src = "assets/cloud.png";
-            break;
-        case 'Clear':
-            weather_img.src = "assets/clear.png";
-            break;
-        case 'Rain':
-            weather_img.src = "assets/rain.png";
-            break;
-        case 'Mist':
-            weather_img.src = "assets/mist.png";
-            break;
-        case 'Snow':
-            weather_img.src = "assets/snow.png";
-            break;
+    case 'Clouds':
+        weather_img.src = "assets/cloud.png";
+        break;
+    case 'Clear':
+        weather_img.src = "assets/clear.png";
+        break;
+    case 'Rain':
+        weather_img.src = "assets/rain.png";
+        break;
+    case 'Mist':
+        weather_img.src = "assets/mist.png";
+        break;
+    case 'Snow':
+        weather_img.src = "assets/snow.png";
+        break;
+  }
 
-    }
+  sendWeatherEmail(weather_data, city);
 
-    console.log(weather_data);
+  console.log(weather_data);
 }
 
 
